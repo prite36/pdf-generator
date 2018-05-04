@@ -1,10 +1,12 @@
 <template>
   <div class="hello">
     <button @click="createPDF()">Download</button>
+    <button @click="test()">test</button>
   </div>
 </template>
 
 <script>
+import logoHeader from '../assets/FITM_LOGO.png'
 import pdfMake from 'pdfmake/build/pdfmake'
 import pdfFonts from 'pdfmake/build/vfs_fonts'
 pdfMake.vfs = pdfFonts.pdfMake.vfs
@@ -31,60 +33,24 @@ export default {
   },
   methods: {
     createPDF () {
-      // var win = window.open()
-      // win.document.open()
-      /* var docDefinition2 = {
-        content: [
-          {
-            style: 'tableExample',
-            table: {
-              heights: 60,
-              // widths: [ '*', 'auto', 100, '*' ],
-              body: [
-                [{text: 'Header 1', style: 'tableHeader'}, {text: 'Header 2', style: 'tableHeader'}, {text: 'Header 3', style: 'tableHeader'}, {text: 'Header 4', style: 'tableHeader'}],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-              ]
-            }
-          }
-        ],
-        styles: {
-          tableExample: {
-          margin: [0, 5, 0, 15]
-          },
-            tableHeader: {
-            bold: true,
-            fontSize: 14,
-            color: 'black'
-          }
-        }
-      } */
       var docDefinition = {
-        footer: function (currentPage, pageCount) { return currentPage.toString() + ' of ' + pageCount },
-        header: function (currentPage, pageCount, pageSize) {
-          // you can apply any logic and return any valid pdfmake element
-          return [
-            { text: 'simple text', alignment: (currentPage % 2) ? 'left' : 'right' },
-            { canvas: [ { type: 'rect', x: 170, y: 32, w: pageSize.width - 170, h: 40 } ] }
-          ]
+        pageMargins: [40, 120, 40, 60],
+        header: {
+          style: 'headerPage',
+          // table: {
+          //   body: [
+          //     ['Column 1', 'Column 2', 'Column 3'],
+          //     ['One value goes here', 'Another one here', 'OK?']
+          //   ]
+          // },
+          image: logoHeader
+        },
+        footer: (currentPage, pageCount) => {
+          return {
+            alignment: 'center',
+            fontSize: 14,
+            text: `Page ${currentPage.toString()}  of  ${pageCount}`
+          }
         },
         content: [
           {
@@ -92,6 +58,7 @@ export default {
             table: {
               heights: 60,
               // widths: [ '*', 'auto', 100, '*' ],
+              headerRows: 1,
               body: [
                 [{text: 'Header 1', style: 'tableHeader'}, {text: 'Header 2', style: 'tableHeader'}, {text: 'Header 3', style: 'tableHeader'}, {text: 'Header 4', style: 'tableHeader'}],
                 [ 'สวัสดดี', 'Value 2', 'Value 3', 'Value 4' ],
@@ -118,12 +85,15 @@ export default {
             }
           }
         ],
-        defaultStyle:{
+        defaultStyle: {
           font: 'THSarabunNew'
         },
         styles: {
+          headerPage: {
+            widths: ['auto', '*', '*'],
+            margin: [40, 20, 40, 0]
+          },
           tableExample: {
-            margin: [5, 5, 0, 15],
             fontSize: 14
           },
           tableHeader: {
