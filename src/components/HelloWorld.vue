@@ -1,7 +1,6 @@
 <template>
   <div class="hello">
     <button @click="createPDF()">Download</button>
-    <button @click="test()">test</button>
   </div>
 </template>
 
@@ -16,12 +15,6 @@ pdfMake.fonts = {
     bold: 'THSarabunNew-Bold.ttf',
     italics: 'THSarabunNew-Italic.ttf',
     bolditalics: 'THSarabunNew-BoldItalic.ttf'
-  },
-  Roboto: {
-    normal: 'Roboto-Regular.ttf',
-    bold: 'Roboto-Medium.ttf',
-    italics: 'Roboto-Italic.ttf',
-    bolditalics: 'Roboto-MediumItalic.ttf'
   }
 }
 export default {
@@ -35,15 +28,42 @@ export default {
     createPDF () {
       var docDefinition = {
         pageMargins: [40, 120, 40, 60],
-        header: {
-          style: 'headerPage',
-          // table: {
-          //   body: [
-          //     ['Column 1', 'Column 2', 'Column 3'],
-          //     ['One value goes here', 'Another one here', 'OK?']
-          //   ]
-          // },
-          image: logoHeader
+        header: () => {
+          return [{
+            style: 'headerPage',
+            table: {
+              widths: ['auto', 200, 230],
+              body: [
+                [
+                  {
+                    image: logoHeader,
+                    width: 60,
+                    border: [false, false, false, false]
+                  },
+                  {text: 'FITM Co-working space System', bold: true, border: [false, false, false, false]},
+                  {
+                    stack: [
+                      {text: 'Report Statistics ', bold: true, alignment: 'right'},
+                      {text: 'รายงานสถิติ ', bold: true, alignment: 'right'}
+                    ],
+                    border: [false, false, false, false]
+                  }
+                ]
+              ]
+            }
+          },
+          {
+            canvas: [
+              {
+                type: 'line',
+                x1: 40,
+                y1: 20,
+                x2: 595 - 40,
+                y2: 20,
+                lineWidth: 1
+              }
+            ]
+          }]
         },
         footer: (currentPage, pageCount) => {
           return {
@@ -90,8 +110,8 @@ export default {
         },
         styles: {
           headerPage: {
-            widths: ['auto', '*', '*'],
-            margin: [40, 20, 40, 0]
+            margin: [40, 20, 40, 0],
+            fontSize: 16
           },
           tableExample: {
             fontSize: 14
