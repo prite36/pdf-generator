@@ -8,6 +8,7 @@
 import logoHeader from '../assets/FITM_LOGO.png'
 import pdfMake from 'pdfmake/build/pdfmake'
 import pdfFonts from 'pdfmake/build/vfs_fonts'
+import momentTime from 'moment-timezone'
 pdfMake.vfs = pdfFonts.pdfMake.vfs
 pdfMake.fonts = {
   THSarabunNew: {
@@ -27,7 +28,7 @@ export default {
   methods: {
     createPDF () {
       var docDefinition = {
-        pageMargins: [40, 120, 40, 60],
+        pageMargins: [40, 120, 40, 40],
         header: () => {
           return [{
             style: 'headerPage',
@@ -66,21 +67,20 @@ export default {
           }]
         },
         footer: (currentPage, pageCount) => {
-          return {
-            alignment: 'center',
-            fontSize: 14,
-            text: `Page ${currentPage.toString()}  of  ${pageCount}`
-          }
+          return [{
+            style: 'footerPage',
+            text: `${momentTime().tz('Asia/Bangkok').format('วันที่  DD-MM-YYYY  เวลา  HH:mm')}\t\t\t\t\t\t\t\t Page ${currentPage.toString()}  of  ${pageCount}`
+          }]
         },
         content: [
           {
             style: 'tableExample',
             table: {
-              heights: 60,
-              // widths: [ '*', 'auto', 100, '*' ],
+              heights: 30,
+              width: '*',
               headerRows: 1,
               body: [
-                [{text: 'Header 1', style: 'tableHeader'}, {text: 'Header 2', style: 'tableHeader'}, {text: 'Header 3', style: 'tableHeader'}, {text: 'Header 4', style: 'tableHeader'}],
+                [{text: 'ประเภทห้อง\ntypeRoom', style: 'tableHeader'}, {text: 'เข้าใช้งาน\ncheck-in', style: 'tableHeader'}, {text: 'Header 3', style: 'tableHeader'}, {text: 'Header 4', style: 'tableHeader'}],
                 [ 'สวัสดดี', 'Value 2', 'Value 3', 'Value 4' ],
                 [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
                 [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
@@ -112,6 +112,11 @@ export default {
           headerPage: {
             margin: [40, 20, 40, 0],
             fontSize: 16
+          },
+          footerPage: {
+            margin: [40, 10, 40, 0],
+            alignment: 'left',
+            fontSize: 14
           },
           tableExample: {
             fontSize: 14

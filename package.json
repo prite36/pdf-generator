@@ -11,9 +11,8 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "iconv-lite": "^0.4.21",
-    "linebreak": "^0.3.0",
-    "pdfkit": "^0.8.3",
+    "moment-timezone": "^0.5.16",
+    "pdfmake": "^0.1.36",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },
